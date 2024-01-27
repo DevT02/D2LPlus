@@ -1,10 +1,9 @@
 {
-    "manifest_version": 2,
+    "manifest_version": 3,
     "name": "My TypeScript Extension",
     "version": "1.0",
     "background": {
-      "scripts": ["dist/background.js"],
-      "persistent": false
+      "service_worker": "dist/background.js"    
     },
     "permissions": []
   }
