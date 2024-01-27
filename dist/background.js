@@ -1,3 +1,3 @@
 "use strict";
-console.log('hi from background');
+console.log("ajkshfjaskfkasfhjksdaaksdfhkadsjf");
 //# sourceMappingURL=background.js.map

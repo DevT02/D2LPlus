@@ -5,6 +5,19 @@
     "background": {
       "service_worker": "dist/background.js"    
     },
-    "permissions": []
-  }
+    "permissions": [
+      "activeTab"
+    ],
+    "content_scripts": [
+      {
+        "matches":["*://d2l.msu.edu/*"],
+        "js": ["dist/contentScript.js"],
+        "run_at": "document_start"
+      }
+    ],
+  "host_permissions": [
+    "*://*.d2l.msu.edu//"
+  ]
+}
+
   
