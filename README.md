@@ -8,3 +8,4 @@ npm init -y <--- intialize npm
 Install TypeScript locally in your project: npm install typescript --save-dev
 Create a tsconfig.json file to configure TypeScript options:
 
+To compile run "tsc"
