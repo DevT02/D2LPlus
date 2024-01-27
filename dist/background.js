@@ -1,3 +1,3 @@
 "use strict";
-console.log("Background script running...");
+console.log('hi from background');
 //# sourceMappingURL=background.js.map
