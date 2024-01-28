@@ -3,8 +3,8 @@ Notice: node.js and npm **required**
 
 Run
 ```shell
-npm install -g typescript <-- install ts
-npm init -y <--- intialize npm
+npm install -g typescript 
+npm init -y 
 npm install typescript --save-dev
 ```
 
