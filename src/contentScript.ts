@@ -1,5 +1,6 @@
 const PREVIEW_BUTTON = `<slot class="PreviewButton"><d2l-button class="preview-btn" primary="" type="button" style="margin-left:auto; margin-right:auto">Preview</d2l-button></slot>`
-
+let lastPress = new Date().getTime()
+let lastPressLimit = 2 * 1000
 
 setTimeout(() => {
     let LZString
@@ -30,6 +31,8 @@ setTimeout(() => {
                         let file_contents = await response.text()
 
                         item.querySelector(`slot[class=PreviewButton]`).querySelector(`d2l-button[class="preview-btn"]`).onclick = function () {
+                            if ((new Date().getTime() - lastPress) < lastPressLimit) return
+                            lastPress = new Date().getTime();
                             chrome.runtime.sendMessage({
                                 action: "openPopup",
                                 lang: file_extension,

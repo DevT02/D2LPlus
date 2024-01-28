@@ -36,6 +36,8 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 };
 var _this = this;
 var PREVIEW_BUTTON = "<slot class=\"PreviewButton\"><d2l-button class=\"preview-btn\" primary=\"\" type=\"button\" style=\"margin-left:auto; margin-right:auto\">Preview</d2l-button></slot>";
+var lastPress = new Date().getTime();
+var lastPressLimit = 2 * 1000;
 setTimeout(function () {
     var LZString;
     (function () { return __awaiter(_this, void 0, void 0, function () {
@@ -73,6 +75,9 @@ setTimeout(function () {
                                 case 2:
                                     file_contents = _a.sent();
                                     item_1.querySelector("slot[class=PreviewButton]").querySelector("d2l-button[class=\"preview-btn\"]").onclick = function () {
+                                        if ((new Date().getTime() - lastPress) < lastPressLimit)
+                                            return;
+                                        lastPress = new Date().getTime();
                                         chrome.runtime.sendMessage({
                                             action: "openPopup",
                                             lang: file_extension_1,
