@@ -50,3 +50,36 @@ setTimeout(() => {
     }
     catch {}
 }, 3000)
+
+/*
+let elementVal = document.querySelector('.d2l-body.d2l-typography.vui-typography.d2l-tiles-container.daylight .d2l-page-main.d2l-max-width.d2l-min-width .d2l-page-main-padding .d2l-homepage .homepage-container .homepage-row .homepage-col-8 .d2l-widget.d2l-tile[role="region"]').querySelector('d2l-expand-collapse-content').querySelector('div.d2l-widget-content-padding d2l-my-courses').shadowRoot.querySelector('d2l-my-courses-container').shadowRoot.querySelector('d2l-tabs d2l-tab-panel').querySelector('d2l-my-courses-content').shadowRoot.querySelector('d2l-my-courses-card-grid').shadowRoot.querySelector('div.course-card-grid.columns-2 d2l-enrollment-card:not([disabled]):not([closed])').shadowRoot.querySelector('d2l-card').shadowRoot.querySelector('.d2l-card-container').querySelector('a[href]').getAttribute('href')
+
+
+var regex = /\/d2l\/home\/(\d+)/; // Regular expression to capture numbers after '/d2l/home/'
+
+var match = elementVal.match(regex);
+var numbers = match ? match[1] : null; // Extract the first captured group
+var finalLink = "https://d2l.msu.edu/d2l/le/calendar/"
+
+if (numbers) {
+  finalLink += numbers
+}
+
+
+let items = document.querySelector('.d2l-body.d2l-typography.vui-typography.d2l-tiles-container.daylight nav.d2l-navigation-s d2l-navigation').querySelector('d2l-navigation-main-footer').querySelector('div[slot="main"]').querySelector('div.d2l-navigation-s-main-wrapper').querySelectorAll('.d2l-navigation-s-item'); 
+var secondToLastItem = items[items.length - 2];
+
+var clone = secondToLastItem.cloneNode(true);
+
+var anchor = clone.querySelector('a');
+if (anchor) {
+  anchor.href = finalLink; // Set the new href value here
+  anchor.textContent = "Calendar";
+}
+
+
+
+var mainWrapper = document.querySelector('div.d2l-navigation-s-main-wrapper');
+
+mainWrapper.appendChild(clone);
+*/
