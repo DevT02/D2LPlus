@@ -6,7 +6,14 @@
       "service_worker": "dist/background.js"    
     },
     "permissions": [
-      "activeTab"
+      "activeTab",
+      "tabs"
+    ],
+    "web_accessible_resources": [
+      {
+        "resources": ["/src/Preview.html"],
+        "matches": [ "*://*/*" ]
+      }
     ],
     "content_scripts": [
       {

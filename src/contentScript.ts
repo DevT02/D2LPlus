@@ -1,5 +1,4 @@
-const PREVIEW_BUTTON = `<slot><d2l-button primary="" type="button" style="margin-left:auto; margin-right:auto">Preview</d2l-button></slot>`
-
+const PREVIEW_BUTTON = `<slot class="PreviewButton"><d2l-button class="preview-btn" primary="" type="button" style="margin-left:auto; margin-right:auto">Preview</d2l-button></slot>`
 
 setTimeout(() => {
     let test = document.querySelector('d2l-consistent-evaluation[class="d2l-token-receiver"]').shadowRoot.querySelector('d2l-consistent-evaluation-page[activity-type="assignmentActivity"]').shadowRoot.querySelector('d2l-template-primary-secondary').querySelector('div[slot="primary"]').querySelector('d2l-consistent-evaluation-left-panel[activity-type="assignmentActivity"]').shadowRoot.querySelector('d2l-consistent-evaluation-evidence-assignment').shadowRoot.querySelector('d2l-consistent-evaluation-assignments-submissions-page').shadowRoot.querySelector('.d2l-consistent-evaluation-submission-list-view').querySelector('d2l-list[separators="between"]').querySelector('d2l-consistent-evaluation-assignments-submission-item').shadowRoot.querySelector('d2l-list[aria-role="list"][separators="all"]')
@@ -15,6 +14,10 @@ setTimeout(() => {
                 let file_extension = file_element.getAttribute("data-extension")
 
                 item.innerHTML += PREVIEW_BUTTON
+
+                item.querySelector(`slot[class=PreviewButton]`).querySelector(`d2l-button[class="preview-btn"]`).onclick = function () {
+                    chrome.runtime.sendMessage({ action: "openPopup" });
+                }
 
                 let getFile  = async () => {
                     let response = await fetch(url)
