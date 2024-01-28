@@ -76,7 +76,7 @@ setTimeout(function () {
                                         chrome.runtime.sendMessage({
                                             action: "openPopup",
                                             lang: file_extension_1,
-                                            code: LZString.compressToBase64(file_contents),
+                                            code: LZString.compressToEncodedURIComponent(file_contents),
                                             file_name: file_name_1
                                         });
                                     };
