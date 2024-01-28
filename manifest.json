@@ -11,7 +11,7 @@
     ],
     "web_accessible_resources": [
       {
-        "resources": ["/src/Preview.html"],
+        "resources": ["Preview.html"],
         "matches": [ "*://*/*" ]
       }
     ],
