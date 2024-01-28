@@ -1,6 +1,6 @@
 {
     "manifest_version": 3,
-    "name": "My TypeScript Extension",
+    "name": "D2L+",
     "version": "1.0",
     "background": {
       "service_worker": "dist/background.js"
