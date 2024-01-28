@@ -3,7 +3,7 @@
     "name": "My TypeScript Extension",
     "version": "1.0",
     "background": {
-      "service_worker": "dist/background.js"    
+      "service_worker": "dist/background.js"
     },
     "permissions": [
       "activeTab",
@@ -11,7 +11,11 @@
     ],
     "web_accessible_resources": [
       {
-        "resources": ["Preview.html"],
+        "resources": ["preview.html"],
+        "matches": [ "*://*/*" ]
+      },
+      {
+        "resources": ["src/lz-string-default.min.js"],
         "matches": [ "*://*/*" ]
       }
     ],

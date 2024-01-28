@@ -1,4 +1,3 @@
-"use strict";
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {
@@ -35,43 +34,64 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
         if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
     }
 };
+var _this = this;
 var PREVIEW_BUTTON = "<slot class=\"PreviewButton\"><d2l-button class=\"preview-btn\" primary=\"\" type=\"button\" style=\"margin-left:auto; margin-right:auto\">Preview</d2l-button></slot>";
 setTimeout(function () {
-    var test = document.querySelector('d2l-consistent-evaluation[class="d2l-token-receiver"]').shadowRoot.querySelector('d2l-consistent-evaluation-page[activity-type="assignmentActivity"]').shadowRoot.querySelector('d2l-template-primary-secondary').querySelector('div[slot="primary"]').querySelector('d2l-consistent-evaluation-left-panel[activity-type="assignmentActivity"]').shadowRoot.querySelector('d2l-consistent-evaluation-evidence-assignment').shadowRoot.querySelector('d2l-consistent-evaluation-assignments-submissions-page').shadowRoot.querySelector('.d2l-consistent-evaluation-submission-list-view').querySelector('d2l-list[separators="between"]').querySelector('d2l-consistent-evaluation-assignments-submission-item').shadowRoot.querySelector('d2l-list[aria-role="list"][separators="all"]');
-    var _loop_1 = function (i) {
-        try {
-            if (test.childNodes.item(i).getAttribute("role")) {
-                var item = test.childNodes.item(i);
-                var file_element = (item.querySelector('d2l-dropdown-menu').querySelector("d2l-menu").querySelector("d2l-menu-item"));
-                var file_name_1 = (item.querySelector('div[class = "d2l-submission-attachment-list-item-flexbox"]').querySelector("d2l-list-item-content").querySelector('a[class="truncate"]').innerText);
-                var url_1 = file_element.getAttribute("data-href");
-                var file_extension_1 = file_element.getAttribute("data-extension");
-                item.innerHTML += PREVIEW_BUTTON;
-                item.querySelector("slot[class=PreviewButton]").querySelector("d2l-button[class=\"preview-btn\"]").onclick = function () {
-                    chrome.runtime.sendMessage({ action: "openPopup" });
-                };
-                var getFile = function () { return __awaiter(void 0, void 0, void 0, function () {
-                    var response, file_contents;
-                    return __generator(this, function (_a) {
-                        switch (_a.label) {
-                            case 0: return [4 /*yield*/, fetch(url_1)];
-                            case 1:
-                                response = _a.sent();
-                                return [4 /*yield*/, response.text()];
-                            case 2:
-                                file_contents = _a.sent();
-                                console.log("".concat(file_name_1, ".").concat(file_extension_1, ":\n").concat(file_contents));
-                                return [2 /*return*/];
-                        }
-                    });
-                }); };
-                getFile();
+    var LZString;
+    (function () { return __awaiter(_this, void 0, void 0, function () {
+        var src;
+        return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0:
+                    src = chrome.runtime.getURL("src/lz-string-default.min.js");
+                    return [4 /*yield*/, import(src)];
+                case 1:
+                    LZString = (_a.sent())["default"];
+                    return [2 /*return*/];
             }
+        });
+    }); })();
+    try {
+        var gradeList = document.querySelector('d2l-consistent-evaluation[class="d2l-token-receiver"]').shadowRoot.querySelector('d2l-consistent-evaluation-page[activity-type="assignmentActivity"]').shadowRoot.querySelector('d2l-template-primary-secondary').querySelector('div[slot="primary"]').querySelector('d2l-consistent-evaluation-left-panel[activity-type="assignmentActivity"]').shadowRoot.querySelector('d2l-consistent-evaluation-evidence-assignment').shadowRoot.querySelector('d2l-consistent-evaluation-assignments-submissions-page').shadowRoot.querySelector('.d2l-consistent-evaluation-submission-list-view').querySelector('d2l-list[separators="between"]').querySelector('d2l-consistent-evaluation-assignments-submission-item').shadowRoot.querySelector('d2l-list[aria-role="list"][separators="all"]');
+        var _loop_1 = function (i) {
+            try {
+                if (gradeList.childNodes.item(i).getAttribute("role")) {
+                    var item_1 = gradeList.childNodes.item(i);
+                    var file_element = (item_1.querySelector('d2l-dropdown-menu').querySelector("d2l-menu").querySelector("d2l-menu-item"));
+                    var file_name_1 = (item_1.querySelector('div[class = "d2l-submission-attachment-list-item-flexbox"]').querySelector("d2l-list-item-content").querySelector('a[class="truncate"]').innerText);
+                    var url_1 = file_element.getAttribute("data-href");
+                    var file_extension_1 = file_element.getAttribute("data-extension");
+                    item_1.innerHTML += PREVIEW_BUTTON;
+                    var getFile = function () { return __awaiter(_this, void 0, void 0, function () {
+                        var response, file_contents;
+                        return __generator(this, function (_a) {
+                            switch (_a.label) {
+                                case 0: return [4 /*yield*/, fetch(url_1)];
+                                case 1:
+                                    response = _a.sent();
+                                    return [4 /*yield*/, response.text()];
+                                case 2:
+                                    file_contents = _a.sent();
+                                    item_1.querySelector("slot[class=PreviewButton]").querySelector("d2l-button[class=\"preview-btn\"]").onclick = function () {
+                                        chrome.runtime.sendMessage({
+                                            action: "openPopup",
+                                            lang: file_extension_1,
+                                            code: LZString.compressToBase64(file_contents),
+                                            file_name: file_name_1
+                                        });
+                                    };
+                                    return [2 /*return*/];
+                            }
+                        });
+                    }); };
+                    getFile();
+                }
+            }
+            catch (_b) { }
+        };
+        for (var i = 0; i < gradeList.childNodes.length; i++) {
+            _loop_1(i);
         }
-        catch (_a) { }
-    };
-    for (var i = 0; i < test.childNodes.length; i++) {
-        _loop_1(i);
     }
+    catch (_a) { }
 }, 3000);
-//# sourceMappingURL=contentScript.js.map
