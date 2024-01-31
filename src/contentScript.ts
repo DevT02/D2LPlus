@@ -146,40 +146,4 @@ async function waitForAnyShadowElement(parent, selectors, timeout = 30000) {
             
 })();
 
-
-
-function injectAndRemoveElement() {
-    // Create a new div element
-    const newDiv = document.createElement('div');
-
-    // Generate a unique identifier
-    const uniqueId = 'div-' + Date.now() + '-' + Math.random().toString(36).substr(2, 9);
-
-    // Set properties for the new div
-    newDiv.id = uniqueId;
-    newDiv.className = 'unique-temporary-div';
-    newDiv.innerHTML = 'This is a unique temporary div';
-    newDiv.style.cssText = `
-        position: fixed;
-        right: 0;
-        top: 50%;
-        background-color: lightblue;
-        padding: 10px;
-        z-index: 1000;
-        border: 2px dashed red;
-    `;
-
-    // Append the new div to the body
-    document.body.appendChild(newDiv);
-
-    // Set a timeout to remove the div
-    setTimeout(() => {
-        const divToRemove = document.getElementById(uniqueId);
-        if (divToRemove) {
-            divToRemove.remove();
-        }
-    }, 5000); // Remove the div after 5 seconds
-}
-
-
 // Call the function to inject the element

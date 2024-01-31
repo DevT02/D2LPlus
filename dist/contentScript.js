@@ -243,24 +243,4 @@ function waitForAnyShadowElement(parent, selectors, timeout) {
         }
     });
 }); })();
-function injectAndRemoveElement() {
-    // Create a new div element
-    var newDiv = document.createElement('div');
-    // Generate a unique identifier
-    var uniqueId = 'div-' + Date.now() + '-' + Math.random().toString(36).substr(2, 9);
-    // Set properties for the new div
-    newDiv.id = uniqueId;
-    newDiv.className = 'unique-temporary-div';
-    newDiv.innerHTML = 'This is a unique temporary div';
-    newDiv.style.cssText = "\n        position: fixed;\n        right: 0;\n        top: 50%;\n        background-color: lightblue;\n        padding: 10px;\n        z-index: 1000;\n        border: 2px dashed red;\n    ";
-    // Append the new div to the body
-    document.body.appendChild(newDiv);
-    // Set a timeout to remove the div
-    setTimeout(function () {
-        var divToRemove = document.getElementById(uniqueId);
-        if (divToRemove) {
-            divToRemove.remove();
-        }
-    }, 5000); // Remove the div after 5 seconds
-}
 // Call the function to inject the element
