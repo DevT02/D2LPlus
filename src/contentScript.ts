@@ -52,34 +52,134 @@ setTimeout(() => {
 }, 3000)
 
 
-// Calender Button
-setTimeout(() => {
-    let elementVal = document.querySelector('.d2l-body.d2l-typography.vui-typography.d2l-tiles-container.daylight .d2l-page-main.d2l-max-width.d2l-min-width .d2l-page-main-padding .d2l-homepage .homepage-container .homepage-row .homepage-col-8 .d2l-widget.d2l-tile[role="region"]').querySelector('d2l-expand-collapse-content').querySelector('div.d2l-widget-content-padding d2l-my-courses').shadowRoot.querySelector('d2l-my-courses-container').shadowRoot.querySelector('d2l-tabs d2l-tab-panel').querySelector('d2l-my-courses-content').shadowRoot.querySelector('d2l-my-courses-card-grid').shadowRoot.querySelector('div.course-card-grid.columns-2 d2l-enrollment-card:not([disabled]):not([closed])').shadowRoot.querySelector('d2l-card').shadowRoot.querySelector('.d2l-card-container').querySelector('a[href]').getAttribute('href')
-
-
-    var regex = /\/d2l\/home\/(\d+)/; // Regular expression to capture numbers after '/d2l/home/'
-
-    var match = elementVal.match(regex);
-    var numbers = match ? match[1] : null; // Extract the first captured group
-    var finalLink = "https://d2l.msu.edu/d2l/le/calendar/"
-
-    if (numbers) {
-        finalLink += numbers
+async function waitForElement(selector) {
+    while (document.querySelector(selector) === null) {
+        await new Promise(resolve => requestAnimationFrame(resolve));
     }
+    console.log(document.querySelector(selector))
+    return document.querySelector(selector);
+}
 
-
-    let items = document.querySelector('.d2l-body.d2l-typography.vui-typography.d2l-tiles-container.daylight nav.d2l-navigation-s d2l-navigation').querySelector('d2l-navigation-main-footer').querySelector('div[slot="main"]').querySelector('div.d2l-navigation-s-main-wrapper').querySelectorAll('.d2l-navigation-s-item');
-    var secondToLastItem = items[items.length - 2];
-
-    var clone = secondToLastItem.cloneNode(true);
-
-    var anchor = clone.querySelector('a');
-    if (anchor) {
-        anchor.href = finalLink; // Set the new href value here
-        anchor.textContent = "Calendar";
+async function waitForShadowElement(parent, selector) {
+    while (parent.shadowRoot === null || parent.shadowRoot.querySelector(selector) === null) {
+        await new Promise(resolve => requestAnimationFrame(resolve));
     }
+    return parent.shadowRoot.querySelector(selector);
+}
 
-    var mainWrapper = document.querySelector('div.d2l-navigation-s-main-wrapper');
+async function waitForChildElement(parent, selector) {
+    while (parent.querySelector(selector) === null) {
+        await new Promise(resolve => requestAnimationFrame(resolve));
+    }
+    return parent.querySelector(selector);
+}
 
-    mainWrapper.appendChild(clone);
-}, 6000)
+async function waitForAnyShadowElement(parent, selectors, timeout = 30000) {
+    let startTime = Date.now();
+    while (Date.now() - startTime < timeout) {
+        for (let selector of selectors) {
+            if (parent.shadowRoot && parent.shadowRoot.querySelector(selector)) {
+                return parent.shadowRoot.querySelector(selector);
+            }
+        }
+        await new Promise(resolve => setTimeout(resolve, 100)); // Check every 100ms
+    }
+    return null; // Timeout reached without finding elements
+}
+
+
+
+//Calender Button: NOTE (FIRST CLASS IS THE ONE THAT IS USED, ENSURE IT IS NOT CLOSED.)
+(async () => {
+        let element = await waitForElement('.d2l-body.d2l-typography.vui-typography.d2l-tiles-container.daylight .d2l-page-main.d2l-max-width.d2l-min-width .d2l-page-main-padding .d2l-homepage .homepage-container .homepage-row .homepage-col-8 .d2l-widget.d2l-tile[role="region"]');
+        element = element.querySelector('d2l-expand-collapse-content');
+        element = element.querySelector('div.d2l-widget-content-padding d2l-my-courses');
+        console.log(element)
+        element = await waitForShadowElement(element, 'd2l-my-courses-container');
+        element = await waitForShadowElement(element, 'd2l-tabs d2l-tab-panel');
+        element = element.querySelector('d2l-my-courses-content');
+        console.log(element)
+        element = await waitForShadowElement(element, 'd2l-my-courses-card-grid');
+        const selectors = [
+            'div.course-card-grid.columns-2 d2l-enrollment-card:not([disabled]):not([closed])',
+            'div.course-card-grid.columns-1 d2l-enrollment-card:not([disabled]):not([closed])',
+            'div.course-card-grid.columns-3 d2l-enrollment-card:not([disabled]):not([closed])'
+        ];
+        
+        element = await waitForAnyShadowElement(element, selectors);
+        element = await waitForShadowElement(element, 'd2l-card');
+        element = await waitForShadowElement(element, '.d2l-card-container');
+        console.log(element)
+        element = await waitForChildElement(element, 'a[href]');
+        element = element.getAttribute('href');
+        console.log(element)
+        let regex = /\/d2l\/home\/(\d+)/; // Regular expression to capture numbers after '/d2l/home/'
+
+        let match = element.match(regex);
+        let numbers = match ? match[1] : null; // Extract the first captured group
+        let finalLink = "https://d2l.msu.edu/d2l/le/calendar/"
+    
+        if (numbers) {
+            finalLink += numbers
+        }
+    
+
+        let navigationParent = await waitForElement('.d2l-body.d2l-typography.vui-typography.d2l-tiles-container.daylight nav.d2l-navigation-s d2l-navigation');
+        let navigationMainFooter = navigationParent.querySelector('d2l-navigation-main-footer');
+        let slotMainDiv = navigationMainFooter.querySelector('div[slot="main"]');
+        let navigationWrapper = slotMainDiv.querySelector('div.d2l-navigation-s-main-wrapper');
+    
+        let items = navigationWrapper.querySelectorAll('.d2l-navigation-s-item');
+    
+        if (items.length >= 2) {
+            let secondToLastItem = items[items.length - 2];
+            let clone = secondToLastItem.cloneNode(true);
+    
+            let anchor = clone.querySelector('a');
+            if (anchor) {
+                anchor.href = finalLink; // Set the new href value here
+                anchor.textContent = "Calendar";
+            }
+    
+            navigationWrapper.appendChild(clone);
+        }
+            
+})();
+
+
+
+function injectAndRemoveElement() {
+    // Create a new div element
+    const newDiv = document.createElement('div');
+
+    // Generate a unique identifier
+    const uniqueId = 'div-' + Date.now() + '-' + Math.random().toString(36).substr(2, 9);
+
+    // Set properties for the new div
+    newDiv.id = uniqueId;
+    newDiv.className = 'unique-temporary-div';
+    newDiv.innerHTML = 'This is a unique temporary div';
+    newDiv.style.cssText = `
+        position: fixed;
+        right: 0;
+        top: 50%;
+        background-color: lightblue;
+        padding: 10px;
+        z-index: 1000;
+        border: 2px dashed red;
+    `;
+
+    // Append the new div to the body
+    document.body.appendChild(newDiv);
+
+    // Set a timeout to remove the div
+    setTimeout(() => {
+        const divToRemove = document.getElementById(uniqueId);
+        if (divToRemove) {
+            divToRemove.remove();
+        }
+    }, 5000); // Remove the div after 5 seconds
+}
+
+
+// Call the function to inject the element

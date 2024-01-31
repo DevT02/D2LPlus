@@ -13,7 +13,7 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     function verb(n) { return function (v) { return step([n, v]); }; }
     function step(op) {
         if (f) throw new TypeError("Generator is already executing.");
-        while (_) try {
+        while (g && (g = 0, op[0] && (_ = 0)), _) try {
             if (f = 1, y && (t = op[0] & 2 ? y["return"] : op[0] ? y["throw"] || ((t = y["return"]) && t.call(y), 0) : y.next) && !(t = t.call(y, op[1])).done) return t;
             if (y = 0, t) op = [op[0] & 2, t.value];
             switch (op[0]) {
@@ -48,7 +48,7 @@ setTimeout(function () {
                     src = chrome.runtime.getURL("src/lz-string-default.min.js");
                     return [4 /*yield*/, import(src)];
                 case 1:
-                    LZString = (_a.sent())["default"];
+                    LZString = (_a.sent()).default;
                     return [2 /*return*/];
             }
         });
@@ -100,24 +100,167 @@ setTimeout(function () {
     }
     catch (_a) { }
 }, 3000);
-// Calender Button
-setTimeout(function () {
-    var elementVal = document.querySelector('.d2l-body.d2l-typography.vui-typography.d2l-tiles-container.daylight .d2l-page-main.d2l-max-width.d2l-min-width .d2l-page-main-padding .d2l-homepage .homepage-container .homepage-row .homepage-col-8 .d2l-widget.d2l-tile[role="region"]').querySelector('d2l-expand-collapse-content').querySelector('div.d2l-widget-content-padding d2l-my-courses').shadowRoot.querySelector('d2l-my-courses-container').shadowRoot.querySelector('d2l-tabs d2l-tab-panel').querySelector('d2l-my-courses-content').shadowRoot.querySelector('d2l-my-courses-card-grid').shadowRoot.querySelector('div.course-card-grid.columns-2 d2l-enrollment-card:not([disabled]):not([closed])').shadowRoot.querySelector('d2l-card').shadowRoot.querySelector('.d2l-card-container').querySelector('a[href]').getAttribute('href');
-    var regex = /\/d2l\/home\/(\d+)/; // Regular expression to capture numbers after '/d2l/home/'
-    var match = elementVal.match(regex);
-    var numbers = match ? match[1] : null; // Extract the first captured group
-    var finalLink = "https://d2l.msu.edu/d2l/le/calendar/";
-    if (numbers) {
-        finalLink += numbers;
-    }
-    var items = document.querySelector('.d2l-body.d2l-typography.vui-typography.d2l-tiles-container.daylight nav.d2l-navigation-s d2l-navigation').querySelector('d2l-navigation-main-footer').querySelector('div[slot="main"]').querySelector('div.d2l-navigation-s-main-wrapper').querySelectorAll('.d2l-navigation-s-item');
-    var secondToLastItem = items[items.length - 2];
-    var clone = secondToLastItem.cloneNode(true);
-    var anchor = clone.querySelector('a');
-    if (anchor) {
-        anchor.href = finalLink; // Set the new href value here
-        anchor.textContent = "Calendar";
-    }
-    var mainWrapper = document.querySelector('div.d2l-navigation-s-main-wrapper');
-    mainWrapper.appendChild(clone);
-}, 6000);
+function waitForElement(selector) {
+    return __awaiter(this, void 0, void 0, function () {
+        return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0:
+                    if (!(document.querySelector(selector) === null)) return [3 /*break*/, 2];
+                    return [4 /*yield*/, new Promise(function (resolve) { return requestAnimationFrame(resolve); })];
+                case 1:
+                    _a.sent();
+                    return [3 /*break*/, 0];
+                case 2:
+                    console.log(document.querySelector(selector));
+                    return [2 /*return*/, document.querySelector(selector)];
+            }
+        });
+    });
+}
+function waitForShadowElement(parent, selector) {
+    return __awaiter(this, void 0, void 0, function () {
+        return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0:
+                    if (!(parent.shadowRoot === null || parent.shadowRoot.querySelector(selector) === null)) return [3 /*break*/, 2];
+                    return [4 /*yield*/, new Promise(function (resolve) { return requestAnimationFrame(resolve); })];
+                case 1:
+                    _a.sent();
+                    return [3 /*break*/, 0];
+                case 2: return [2 /*return*/, parent.shadowRoot.querySelector(selector)];
+            }
+        });
+    });
+}
+function waitForChildElement(parent, selector) {
+    return __awaiter(this, void 0, void 0, function () {
+        return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0:
+                    if (!(parent.querySelector(selector) === null)) return [3 /*break*/, 2];
+                    return [4 /*yield*/, new Promise(function (resolve) { return requestAnimationFrame(resolve); })];
+                case 1:
+                    _a.sent();
+                    return [3 /*break*/, 0];
+                case 2: return [2 /*return*/, parent.querySelector(selector)];
+            }
+        });
+    });
+}
+function waitForAnyShadowElement(parent, selectors, timeout) {
+    if (timeout === void 0) { timeout = 30000; }
+    return __awaiter(this, void 0, void 0, function () {
+        var startTime, _i, selectors_1, selector;
+        return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0:
+                    startTime = Date.now();
+                    _a.label = 1;
+                case 1:
+                    if (!(Date.now() - startTime < timeout)) return [3 /*break*/, 3];
+                    for (_i = 0, selectors_1 = selectors; _i < selectors_1.length; _i++) {
+                        selector = selectors_1[_i];
+                        if (parent.shadowRoot && parent.shadowRoot.querySelector(selector)) {
+                            return [2 /*return*/, parent.shadowRoot.querySelector(selector)];
+                        }
+                    }
+                    return [4 /*yield*/, new Promise(function (resolve) { return setTimeout(resolve, 100); })];
+                case 2:
+                    _a.sent(); // Check every 100ms
+                    return [3 /*break*/, 1];
+                case 3: return [2 /*return*/, null]; // Timeout reached without finding elements
+            }
+        });
+    });
+}
+//Calender Button: NOTE (FIRST CLASS IS THE ONE THAT IS USED, ENSURE IT IS NOT CLOSED.)
+(function () { return __awaiter(_this, void 0, void 0, function () {
+    var element, selectors, regex, match, numbers, finalLink, navigationParent, navigationMainFooter, slotMainDiv, navigationWrapper, items, secondToLastItem, clone, anchor;
+    return __generator(this, function (_a) {
+        switch (_a.label) {
+            case 0: return [4 /*yield*/, waitForElement('.d2l-body.d2l-typography.vui-typography.d2l-tiles-container.daylight .d2l-page-main.d2l-max-width.d2l-min-width .d2l-page-main-padding .d2l-homepage .homepage-container .homepage-row .homepage-col-8 .d2l-widget.d2l-tile[role="region"]')];
+            case 1:
+                element = _a.sent();
+                element = element.querySelector('d2l-expand-collapse-content');
+                element = element.querySelector('div.d2l-widget-content-padding d2l-my-courses');
+                console.log(element);
+                return [4 /*yield*/, waitForShadowElement(element, 'd2l-my-courses-container')];
+            case 2:
+                element = _a.sent();
+                return [4 /*yield*/, waitForShadowElement(element, 'd2l-tabs d2l-tab-panel')];
+            case 3:
+                element = _a.sent();
+                element = element.querySelector('d2l-my-courses-content');
+                console.log(element);
+                return [4 /*yield*/, waitForShadowElement(element, 'd2l-my-courses-card-grid')];
+            case 4:
+                element = _a.sent();
+                selectors = [
+                    'div.course-card-grid.columns-2 d2l-enrollment-card:not([disabled]):not([closed])',
+                    'div.course-card-grid.columns-1 d2l-enrollment-card:not([disabled]):not([closed])',
+                    'div.course-card-grid.columns-3 d2l-enrollment-card:not([disabled]):not([closed])'
+                ];
+                return [4 /*yield*/, waitForAnyShadowElement(element, selectors)];
+            case 5:
+                element = _a.sent();
+                return [4 /*yield*/, waitForShadowElement(element, 'd2l-card')];
+            case 6:
+                element = _a.sent();
+                return [4 /*yield*/, waitForShadowElement(element, '.d2l-card-container')];
+            case 7:
+                element = _a.sent();
+                console.log(element);
+                return [4 /*yield*/, waitForChildElement(element, 'a[href]')];
+            case 8:
+                element = _a.sent();
+                element = element.getAttribute('href');
+                console.log(element);
+                regex = /\/d2l\/home\/(\d+)/;
+                match = element.match(regex);
+                numbers = match ? match[1] : null;
+                finalLink = "https://d2l.msu.edu/d2l/le/calendar/";
+                if (numbers) {
+                    finalLink += numbers;
+                }
+                return [4 /*yield*/, waitForElement('.d2l-body.d2l-typography.vui-typography.d2l-tiles-container.daylight nav.d2l-navigation-s d2l-navigation')];
+            case 9:
+                navigationParent = _a.sent();
+                navigationMainFooter = navigationParent.querySelector('d2l-navigation-main-footer');
+                slotMainDiv = navigationMainFooter.querySelector('div[slot="main"]');
+                navigationWrapper = slotMainDiv.querySelector('div.d2l-navigation-s-main-wrapper');
+                items = navigationWrapper.querySelectorAll('.d2l-navigation-s-item');
+                if (items.length >= 2) {
+                    secondToLastItem = items[items.length - 2];
+                    clone = secondToLastItem.cloneNode(true);
+                    anchor = clone.querySelector('a');
+                    if (anchor) {
+                        anchor.href = finalLink; // Set the new href value here
+                        anchor.textContent = "Calendar";
+                    }
+                    navigationWrapper.appendChild(clone);
+                }
+                return [2 /*return*/];
+        }
+    });
+}); })();
+function injectAndRemoveElement() {
+    // Create a new div element
+    var newDiv = document.createElement('div');
+    // Generate a unique identifier
+    var uniqueId = 'div-' + Date.now() + '-' + Math.random().toString(36).substr(2, 9);
+    // Set properties for the new div
+    newDiv.id = uniqueId;
+    newDiv.className = 'unique-temporary-div';
+    newDiv.innerHTML = 'This is a unique temporary div';
+    newDiv.style.cssText = "\n        position: fixed;\n        right: 0;\n        top: 50%;\n        background-color: lightblue;\n        padding: 10px;\n        z-index: 1000;\n        border: 2px dashed red;\n    ";
+    // Append the new div to the body
+    document.body.appendChild(newDiv);
+    // Set a timeout to remove the div
+    setTimeout(function () {
+        var divToRemove = document.getElementById(uniqueId);
+        if (divToRemove) {
+            divToRemove.remove();
+        }
+    }, 5000); // Remove the div after 5 seconds
+}
+// Call the function to inject the element
