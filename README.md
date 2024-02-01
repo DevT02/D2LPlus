@@ -7,6 +7,9 @@
 
 Multipurpose browser extension to improve the Desire-To-Learn (D2L) online learning platform.
 
+<img src="https://github.com/DevT02/D2LPlus/assets/40608267/54156ef4-0796-4af2-8a02-ea448289222a" width="640" height="360">
+
+
 ## User Setup
 Navigate to latest release [here](https://github.com/DevT02/D2LPlus/releases) 
 1. Download `source_code.zip`
