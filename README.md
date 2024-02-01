@@ -27,7 +27,7 @@ npm init -y
 npm install typescript --save-dev
 ```
 
-Finally, to compile run `tsc`, or if you prefer a live compiler `tsc-w` 
+Finally, to compile run `tsc`, or if you prefer a live compiler `tsc -w` 
 
 
 For additional information on how to access shadowRoot elements with querySelectors, refer to 
