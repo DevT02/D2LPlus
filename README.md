@@ -1,21 +1,34 @@
-# D2L+
-Notice: node.js and npm **required**
 
-Run
+
+<img src="https://github.com/DevT02/D2LPlus/assets/40608267/618318ae-a4a2-473b-8237-52eb5725ef85" width="125" height="125">
+
+
+# D2L+
+
+Multipurpose browser extension to improve the Desire-To-Learn (D2L) online learning platform.
+
+## User Setup
+Navigate to latest release [here](https://github.com/DevT02/D2LPlus/releases) 
+1. Download `source_code.zip`
+2. Unzip the `source_code.zip` 
+3. Navigate to `chrome://extensions`
+4. Click the `Developer Mode` toggle on
+5. Press `Load Unpacked` 
+6. Find the directory of the extracted extension, select, and enjoy!
+
+
+## Developer Setup
+***Notice***: typescript transpiler **required**
+
+To install, ensure a package manager such as node.js is present on the machine. 
 ```shell
 npm install -g typescript 
 npm init -y 
 npm install typescript --save-dev
 ```
 
-To compile run "tsc -w"
+Finally, to compile run `tsc`, or if you prefer a live compiler `tsc-w` 
 
-QUERY SELECTOR: To get all list items
-```
-document.querySelector('d2l-consistent-evaluation[class="d2l-token-receiver"]').shadowRoot.querySelector('d2l-consistent-evaluation-page[activity-type="assignmentActivity"]').shadowRoot.querySelector('d2l-template-primary-secondary').querySelector('div[slot="primary"]').querySelector('d2l-consistent-evaluation-left-panel[activity-type="assignmentActivity"]').shadowRoot.querySelector('d2l-consistent-evaluation-evidence-assignment').shadowRoot.querySelector('d2l-consistent-evaluation-assignments-submissions-page').shadowRoot.querySelector('.d2l-consistent-evaluation-submission-list-view').querySelector('d2l-list[separators="between"]').querySelector('d2l-consistent-evaluation-assignments-submission-item').shadowRoot.querySelector('d2l-list[aria-role="list"][separators="all"]')
-```
 
-QUERY SELECTOR: To get just the download link
-```
-document.querySelector('d2l-consistent-evaluation[class="d2l-token-receiver"]').shadowRoot.querySelector('d2l-consistent-evaluation-page[activity-type="assignmentActivity"]').shadowRoot.querySelector('d2l-template-primary-secondary').querySelector('div[slot="primary"]').querySelector('d2l-consistent-evaluation-left-panel[activity-type="assignmentActivity"]').shadowRoot.querySelector('d2l-consistent-evaluation-evidence-assignment').shadowRoot.querySelector('d2l-consistent-evaluation-assignments-submissions-page').shadowRoot.querySelector('.d2l-consistent-evaluation-submission-list-view').querySelector('d2l-list[separators="between"]').querySelector('d2l-consistent-evaluation-assignments-submission-item').shadowRoot.querySelector('d2l-list[aria-role="list"][separators="all"]').querySelector('d2l-list-item[role="listitem"][_separators="all"]').querySelector('div[slot="actions"]').querySelector('d2l-dropdown-menu').querySelector("d2l-menu").querySelector("d2l-menu-item").getAttribute("data-href");
-```
+For additional information on how to access shadowRoot elements with querySelectors, refer to 
+https://github.com/DevT02/D2LPlus/blob/563c805c4f1fe818ba458d191dbfa646ad7b7a2c/src/contentScript.ts#L55-L99
