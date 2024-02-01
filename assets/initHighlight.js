@@ -1,1 +1,2 @@
+hljs.debugMode();
 hljs.highlightAll();

@@ -1,6 +1,6 @@
 {
     "manifest_version": 3,
-    "name": "D2L+",
+    "name": "D2L+ Canary",
     "version": "1.0",
     "background": {
       "service_worker": "dist/background.js"
