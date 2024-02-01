@@ -9,15 +9,18 @@ Multipurpose browser extension to improve the Desire-To-Learn (D2L) online learn
 
 <img src="https://github.com/DevT02/D2LPlus/assets/40608267/54156ef4-0796-4af2-8a02-ea448289222a" width="640" height="360">
 
-
+### Features
+- Preview files in various supported formats from submissions within a new tab without a download.
+- Calendar integrated into the homepage (ensure first class is **NOT** closed).
+- MORE SOON!
 ## User Setup
-Navigate to latest release [here](https://github.com/DevT02/D2LPlus/releases) 
-1. Download `source_code.zip`
-2. Unzip the `source_code.zip` 
-3. Navigate to `chrome://extensions`
-4. Click the `Developer Mode` toggle on
-5. Press `Load Unpacked` 
-6. Find the directory of the extracted extension, select, and enjoy!
+1. Navigate to latest release [here](https://github.com/DevT02/D2LPlus/releases) 
+2. Download `source_code.zip`
+3. Unzip the `source_code.zip` 
+4. Navigate to `chrome://extensions`
+5. Click the `Developer Mode` toggle on (top right)
+6. Click `Load Unpacked` (top left)
+7. Find the directory of the extracted extension, select, and enjoy
 
 
 ## Developer Setup
