@@ -1,34 +1,58 @@
 {
-    "manifest_version": 3,
-    "name": "D2L+",
-    "version": "1.0",
-    "background": {
-      "service_worker": "dist/background.js"
-    },
-    "permissions": [
-      "activeTab",
-      "tabs"
-    ],
-    "web_accessible_resources": [
-      {
-        "resources": ["preview.html"],
-        "matches": [ "*://*/*" ]
-      },
-      {
-        "resources": ["src/lz-string-default.min.js"],
-        "matches": [ "*://*/*" ]
-      }
-    ],
-    "content_scripts": [
-      {
-        "matches":["*://d2l.msu.edu/*"],
-        "js": ["dist/contentScript.js"],
-        "run_at": "document_end"
-      }
-    ],
-  "host_permissions": [
-    "*://*.d2l.msu.edu//"
+  "manifest_version": 3,
+  "name": "D2L+",
+  "version": "1.0",
+  "background": {
+    "service_worker": "dist/background.js"
+  },
+  "permissions": [
+    "activeTab",
+    "tabs",
+    "storage"
   ],
+  "action": {
+    "default_title": "D2L+",
+    "default_popup": "popup.html"
+  },
+  "web_accessible_resources": [
+    {
+      "resources": [
+        "preview.html"
+      ],
+      "matches": [
+        "*://*/*"
+      ]
+    },
+    {
+      "resources": [
+        "src/lz-string-default.min.js"
+      ],
+      "matches": [
+        "*://*/*"
+      ]
+    }
+  ],
+  "content_scripts": [
+    {
+      "matches": [
+        "*://d2l.msu.edu/*"
+      ],
+      "js": [
+        "dist/contentScript.js"
+      ],
+      "run_at": "document_end",
+      "all_frames": true
+    }
+  ],
+  "host_permissions": [
+    "*://*.d2l.msu.edu/*"
+  ],
+  "browser_specific_settings": {
+    "gecko": {
+      "id": "d2lplus@local",
+      "strict_min_version": "109.0"
+    }
+  },
   "icons": {
     "16": "icons/icon16.png",
     "32": "icons/icon32.png",
@@ -36,5 +60,3 @@
     "128": "icons/icon128.png"
   }
 }
-
-  

@@ -1,0 +1,186 @@
+:root {
+  color-scheme: light dark;
+  font-family: "IBM Plex Sans", "Segoe UI", sans-serif;
+  --bg-primary: #f4f7ff;
+  --bg-secondary: #ffffff;
+  --bg-tertiary: #f1f5f9;
+  --text-primary: #101828;
+  --text-secondary: #475467;
+  --border: #e4e7ec;
+  --accent: #2563eb;
+  --accent-hover: #1d4ed8;
+  --accent-focus: rgba(37, 99, 235, 0.2);
+  --danger: #c5221f;
+  --shadow: none;
+  --radius: 8px;
+  --select-chevron: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%23475467' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg-primary: #0f1114;
+    --bg-secondary: #161b22;
+    --bg-tertiary: #21262d;
+    --text-primary: #e6e6e6;
+    --text-secondary: #b0b8c4;
+    --border: #30363d;
+    --accent: #3b82f6;
+    --accent-hover: #60a5fa;
+    --accent-focus: rgba(59, 130, 246, 0.25);
+    --shadow: none;
+    --select-chevron: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%2394a3b8' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+  }
+}
+
+body {
+  margin: 0;
+  background: var(--bg-primary);
+  color: var(--text-primary);
+  min-width: 260px;
+  font-size: 14px;
+}
+
+.panel {
+  padding: 16px;
+}
+
+.panel__header {
+  display: grid;
+  gap: 2px;
+  margin-bottom: 12px;
+  text-align: left;
+}
+
+.panel__title {
+  font-size: 16px;
+  font-weight: 600;
+  letter-spacing: 0.1px;
+}
+
+.panel__subtitle {
+  font-size: 12px;
+  color: var(--text-secondary);
+}
+
+.panel__section {
+  display: grid;
+  gap: 10px;
+  margin: 12px 0 16px;
+}
+
+.select-group {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  align-items: center;
+  gap: 12px;
+  background: var(--bg-secondary);
+  border-radius: 6px;
+  padding: 10px 12px;
+  box-shadow: var(--shadow);
+  border: 1px solid var(--border);
+}
+
+.select-group__label {
+  font-size: 13px;
+  font-weight: 500;
+}
+
+.select-group__select {
+  appearance: none;
+  background: var(--bg-tertiary);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 6px 28px 6px 10px;
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--text-primary);
+  cursor: pointer;
+  background-image: var(--select-chevron);
+  background-repeat: no-repeat;
+  background-position: right 8px center;
+  color-scheme: light dark;
+}
+
+.select-group__select:hover {
+  background-color: var(--bg-primary);
+}
+
+.select-group__select:focus {
+  outline: none;
+  border-color: var(--accent);
+  box-shadow: 0 0 0 2px var(--accent-focus);
+}
+
+.toggle {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  align-items: center;
+  gap: 12px;
+  background: var(--bg-secondary);
+  border-radius: 6px;
+  padding: 10px 12px;
+  box-shadow: var(--shadow);
+  border: 1px solid var(--border);
+  cursor: pointer;
+}
+
+.toggle__label {
+  font-size: 13px;
+  font-weight: 500;
+}
+
+.toggle input {
+  display: none;
+}
+
+.toggle__control {
+  width: 38px;
+  height: 22px;
+  border-radius: 999px;
+  background: var(--border);
+  position: relative;
+  transition: background 0.2s ease;
+}
+
+.toggle__control::after {
+  content: "";
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: #ffffff;
+  position: absolute;
+  top: 3px;
+  left: 3px;
+  box-shadow: 0 2px 6px rgba(15, 23, 42, 0.2);
+  transition: transform 0.2s ease;
+}
+
+.toggle input:checked + .toggle__control {
+  background: var(--accent);
+}
+
+.toggle input:checked + .toggle__control::after {
+  transform: translateX(16px);
+}
+
+.panel__footer {
+  display: flex;
+  justify-content: flex-end;
+  border-top: 1px solid var(--border);
+  padding-top: 8px;
+}
+
+.btn {
+  border: 1px solid var(--border);
+  background: transparent;
+  color: var(--text-primary);
+  font-size: 12px;
+  padding: 8px 12px;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+.btn:hover {
+  background: var(--bg-tertiary);
+}

@@ -22,6 +22,15 @@ Multipurpose browser extension to improve the Desire-To-Learn (D2L) online learn
 6. Click `Load Unpacked` (top left)
 7. Find the directory of the extracted extension, select, and enjoy
 
+## Firefox Setup
+1. Navigate to latest release [here](https://github.com/DevT02/D2LPlus/releases) 
+2. Download `source_code.zip`
+3. Unzip the `source_code.zip`
+4. Navigate to `about:debugging#/runtime/this-firefox`
+5. Click `Load Temporary Add-on`
+6. Select the `manifest.json` inside the extracted directory
+7. Keep the tab open while testing (temporary add-ons are removed on restart)
+
 
 ## Developer Setup
 ***Notice***: typescript transpiler **required**
