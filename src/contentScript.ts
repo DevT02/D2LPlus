@@ -1,5 +1,6 @@
 (function () {
     type D2LPlusSettings = {
+        enabled: boolean;
         darkMode: boolean; // legacy, kept for migration
         theme: 'system' | 'light' | 'dark';
         animations: boolean;
@@ -11,6 +12,7 @@
     const ext = globalThis.browser ?? globalThis.chrome;
 
     const DEFAULT_SETTINGS: D2LPlusSettings = {
+        enabled: true,
         darkMode: true, // legacy
         theme: 'dark',
         animations: true,
@@ -2403,6 +2405,44 @@
     }
 
     function applySettings(settings: D2LPlusSettings) {
+        const disableExtension = () => {
+            document.documentElement.classList.remove("d2lplus-dark", "d2lplus-animate", "d2lplus-focus", "d2lplus-allpage-active");
+            setStyle("d2lplus-theme-vars", "", false);
+            setStyle("d2lplus-dark-style", "", false);
+            setStyle("d2lplus-animate-style", "", false);
+            setStyle("d2lplus-focus-style", "", false);
+            setStyle("d2lplus-quicklinks-style", "", false);
+            setStyle("d2lplus-back-style", "", false);
+            setStyle("d2lplus-allpage-style", "", false);
+
+            if (dynamicObserver) {
+                dynamicObserver.disconnect();
+                dynamicObserver = null;
+            }
+            if (debounceTimeout) {
+                clearTimeout(debounceTimeout);
+                debounceTimeout = null;
+            }
+            const navObserver = (window as any).d2lPlusNavObserver as MutationObserver | undefined;
+            if (navObserver) navObserver.disconnect();
+            const wrapperObserver = (window as any).d2lPlusNavWrapperObserver as MutationObserver | undefined;
+            if (wrapperObserver) wrapperObserver.disconnect();
+
+            removeQuickLinks();
+            observeLegacyNav(false);
+            document.querySelectorAll("[data-d2lplus-back]").forEach(node => node.remove());
+            document.querySelectorAll(`[${ALL_PAGE_ATTR}]`).forEach(node => node.remove());
+            removeFrameStyles(document);
+
+            applyDarkModeToCourseCards(false);
+            applyDarkModeToShadowElements(false);
+        };
+
+        if (!settings.enabled) {
+            disableExtension();
+            return;
+        }
+
         const isDarkMode = getIsDarkMode(settings);
 
         // Determine active theme colors
@@ -2518,6 +2558,17 @@
 
     let dynamicObserver: MutationObserver | null = null;
     let debounceTimeout: ReturnType<typeof setTimeout> | null = null;
+
+    const removeFrameStyles = (root: ParentNode) => {
+        const frames = Array.from(root.querySelectorAll("iframe")) as HTMLIFrameElement[];
+        for (const frame of frames) {
+            try {
+                const doc = frame.contentDocument;
+                if (!doc) continue;
+                doc.getElementById("d2lplus-frame-dark")?.remove();
+            } catch { }
+        }
+    };
 
     function setupDynamicStyleObserver() {
         if (dynamicObserver) return; // Already set up

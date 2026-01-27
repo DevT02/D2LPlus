@@ -1,5 +1,6 @@
 (() => {
     type D2LPlusSettings = {
+        enabled: boolean;
         darkMode: boolean; // legacy
         theme: 'system' | 'light' | 'dark';
         animations: boolean;
@@ -9,6 +10,7 @@
     };
 
     const DEFAULT_SETTINGS: D2LPlusSettings = {
+        enabled: true,
         darkMode: true,
         theme: 'dark',
         animations: true,
@@ -79,6 +81,7 @@
         }
 
         bindThemeSelector(settings);
+        bindToggle("enabled", settings);
         bindToggle("animations", settings);
         bindToggle("quickLinks", settings);
         bindToggle("focusView", settings);
@@ -92,6 +95,7 @@
             // Rebind all controls
             const themeSelect = document.getElementById("theme") as HTMLSelectElement | null;
             if (themeSelect) themeSelect.value = fresh.theme;
+            bindToggle("enabled", fresh);
             bindToggle("animations", fresh);
             bindToggle("quickLinks", fresh);
             bindToggle("focusView", fresh);

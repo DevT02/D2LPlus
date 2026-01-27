@@ -3,6 +3,7 @@
 export type ThemeName = 'light' | 'dark' | 'midnight' | 'nord' | 'solarized' | 'forest';
 
 export interface D2LPlusSettings {
+    enabled: boolean;
     darkMode: boolean; // legacy - kept for backward compatibility
     theme: ThemeName | 'system';
     animations: boolean;
@@ -12,6 +13,7 @@ export interface D2LPlusSettings {
 }
 
 export const DEFAULT_SETTINGS: D2LPlusSettings = {
+    enabled: true,
     darkMode: true,
     theme: 'dark',
     animations: true,
