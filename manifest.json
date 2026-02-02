@@ -25,7 +25,7 @@
     },
     {
       "resources": [
-        "src/lz-string-default.min.js"
+        "src/lz-string.min.js"
       ],
       "matches": [
         "*://*/*"
@@ -38,7 +38,7 @@
         "*://d2l.msu.edu/*"
       ],
       "js": [
-        "src/lz-string-default.min.js",
+        "src/lz-string.min.js",
         "dist/contentScript.js"
       ],
       "run_at": "document_end",

@@ -14,7 +14,7 @@ const buildFiles = [
   "assignments.html",
   "dashboard.css",
   "preview.html",
-  "src/lz-string-default.min.js",
+  "src/lz-string.min.js",
   "README.md",
 ];
 
