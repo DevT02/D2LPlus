@@ -1922,6 +1922,10 @@
     border-radius: 12px;
     padding: 10px 12px;
 }
+.d2lplus-allpage__item[open] {
+    border-color: #c7d2fe;
+    box-shadow: 0 8px 20px rgba(15, 23, 42, 0.08);
+}
 .d2lplus-allpage__summary {
     cursor: pointer;
     font-weight: 600;
@@ -1929,6 +1933,11 @@
     display: flex;
     align-items: center;
     gap: 8px;
+}
+.d2lplus-allpage__item[open] .d2lplus-allpage__summary {
+    padding-bottom: 8px;
+    margin-bottom: 8px;
+    border-bottom: 1px solid #e5e7eb;
 }
 .d2lplus-allpage__summary::-webkit-details-marker {
     display: none;
@@ -1970,8 +1979,133 @@
     max-height: 70vh;
     margin-top: 10px;
     border-radius: 10px;
-    background: #f8fafc;
+    background: transparent;
     overflow: auto;
+    padding: 0;
+}
+.d2lplus-allpage__list {
+    display: grid;
+    gap: 12px;
+}
+.d2lplus-allpage__entry {
+    background: #ffffff;
+    border: 1px solid #e5e7eb;
+    border-radius: 12px;
+    padding: 12px;
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 12px;
+    align-items: start;
+}
+.d2lplus-allpage__entry-title {
+    font-weight: 700;
+    margin-bottom: 6px;
+}
+.d2lplus-allpage__meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    color: #475467;
+    font-size: 12px;
+}
+.d2lplus-allpage__pill {
+    background: #f1f5f9;
+    border: 1px solid #e2e8f0;
+    border-radius: 999px;
+    padding: 2px 8px;
+}
+.d2lplus-allpage__score {
+    font-weight: 700;
+    color: #0f172a;
+    white-space: nowrap;
+    text-align: right;
+}
+.d2lplus-allpage__empty {
+    background: #ffffff;
+    border: 1px dashed #cbd5f5;
+    border-radius: 12px;
+    padding: 16px;
+    color: #475467;
+    font-size: 13px;
+}
+.d2lplus-allpage__link {
+    display: inline-flex;
+    margin-top: 8px;
+    font-size: 12px;
+    color: #1d4ed8;
+    text-decoration: none;
+}
+.d2lplus-allpage__link:hover {
+    text-decoration: underline;
+}
+.d2lplus-dark .d2lplus-allpage__entry {
+    background: #0f172a;
+    border-color: #1e293b;
+    color: #e2e8f0;
+}
+.d2lplus-dark .d2lplus-allpage__entry-title {
+    color: #f8fafc;
+}
+.d2lplus-dark .d2lplus-allpage__meta {
+    color: #cbd5f5;
+}
+.d2lplus-dark .d2lplus-allpage__pill {
+    background: #111827;
+    border-color: #1f2937;
+    color: #e2e8f0;
+}
+.d2lplus-dark .d2lplus-allpage__score {
+    color: #f8fafc;
+}
+.d2lplus-dark .d2lplus-allpage__empty {
+    background: #0f172a;
+    border-color: #1e293b;
+    color: #cbd5f5;
+}
+.d2lplus-dark .d2lplus-allpage__link {
+    color: #93c5fd;
+}
+.d2lplus-dark .d2lplus-allpage__entry:hover,
+.d2lplus-dark .d2lplus-allpage__entry:focus-within {
+    background: #111827;
+    border-color: #334155;
+}
+.d2lplus-allpage__frame .d2l-table,
+.d2lplus-allpage__frame .d2l-grid {
+    background: transparent !important;
+    color: inherit;
+}
+.d2lplus-allpage__frame .d2l-table td,
+.d2lplus-allpage__frame .d2l-table th {
+    background: transparent !important;
+}
+.d2lplus-allpage__frame .d2l-link {
+    color: #1d4ed8 !important;
+}
+.d2lplus-allpage__frame .d2l-link:hover {
+    text-decoration: underline;
+}
+.d2lplus-dark .d2lplus-allpage__frame {
+    background: #0b1220;
+    border: 1px solid #1e293b;
+    padding: 8px;
+}
+.d2lplus-dark .d2lplus-allpage__frame .d2l-table,
+.d2lplus-dark .d2lplus-allpage__frame .d2l-grid {
+    color: #e2e8f0 !important;
+}
+.d2lplus-dark .d2lplus-allpage__frame .d2l-table td,
+.d2lplus-dark .d2lplus-allpage__frame .d2l-table th {
+    color: #e2e8f0 !important;
+    border-color: #1e293b !important;
+}
+.d2lplus-dark .d2lplus-allpage__frame .d2l-link {
+    color: #93c5fd !important;
+}
+.d2lplus-dark .d2lplus-allpage__frame .d2l-table tr:hover,
+.d2lplus-dark .d2lplus-allpage__frame .d2l-table tr:hover td,
+.d2lplus-dark .d2lplus-allpage__frame .d2l-table tr:hover th {
+    background: rgba(15, 23, 42, 0.6) !important;
 }
 .d2lplus-allpage__resize {
     height: 10px;
@@ -3327,6 +3461,277 @@
             frame.addEventListener("load", applyToFrame, { once: true });
             applyToFrame();
         }
+    };
+
+    const normalizeText = (value: string | null | undefined) =>
+        (value || "").replace(/\s+/g, " ").trim();
+
+    const normalizeHeader = (value: string | null | undefined) =>
+        normalizeText(value).toLowerCase();
+
+    type AllPageItem = {
+        title: string;
+        due?: string;
+        score?: string;
+        status?: string;
+        feedback?: string;
+        attachments?: string;
+        link?: string;
+    };
+
+    const getHeaderMap = (table: HTMLTableElement) => {
+        const rows = Array.from(table.querySelectorAll("tr"));
+        let headerCells: HTMLTableCellElement[] = [];
+        let headerRowIndex = -1;
+        for (let i = 0; i < rows.length; i++) {
+            const ths = Array.from(rows[i].querySelectorAll("th")) as HTMLTableCellElement[];
+            const header = rows[i].getAttribute("header");
+            if (header !== null && ths.length) {
+                headerCells = ths;
+                headerRowIndex = i;
+                break;
+            }
+        }
+        if (headerRowIndex === -1) {
+            for (let i = 0; i < rows.length; i++) {
+                const ths = Array.from(rows[i].querySelectorAll("th")) as HTMLTableCellElement[];
+                if (ths.length) {
+                    headerCells = ths;
+                    headerRowIndex = i;
+                    break;
+                }
+            }
+        }
+        const headers = headerCells.map((cell) => normalizeHeader(cell.textContent));
+        return { headers, headerRowIndex, rows };
+    };
+
+    const findHeaderIndex = (headers: string[], needles: string[]) => {
+        for (let i = 0; i < headers.length; i++) {
+            const header = headers[i];
+            if (!header) continue;
+            for (const needle of needles) {
+                if (header.includes(needle)) return i;
+            }
+        }
+        return -1;
+    };
+
+    const extractRowText = (row: HTMLTableRowElement, index: number) => {
+        const cells = Array.from(row.querySelectorAll("td, th")) as HTMLTableCellElement[];
+        if (!cells.length) return "";
+        const cell = cells[index];
+        return normalizeText(cell ? cell.textContent : "");
+    };
+
+    const extractRowTitle = (row: HTMLTableRowElement) => {
+        const anchor = row.querySelector("a") as HTMLAnchorElement | null;
+        const anchorText = normalizeText(anchor?.textContent);
+        if (anchorText && !/^\d/.test(anchorText)) return anchorText;
+
+        const cellTexts = Array.from(row.querySelectorAll("td, th"))
+            .map((cell) => normalizeText(cell.textContent))
+            .filter(Boolean);
+
+        const filtered = cellTexts.filter((text) => {
+            const lower = text.toLowerCase();
+            if (/^\d+(\.\d+)?\s*\/\s*\d+(\.\d+)?$/.test(text)) return false;
+            if (/^\d+(\.\d+)?\s*%$/.test(text)) return false;
+            if (lower.startsWith("due on")) return false;
+            if (lower.startsWith("feedback")) return false;
+            if (lower.startsWith("attachments")) return false;
+            if (lower === "not submitted") return false;
+            if (lower === "submitted") return false;
+            if (lower === "graded") return false;
+            if (lower === "complete") return false;
+            if (lower === "incomplete") return false;
+            return text.length >= 3 && !/^\d/.test(text);
+        });
+
+        if (!filtered.length) return "";
+        filtered.sort((a, b) => b.length - a.length);
+        return filtered[0];
+    };
+
+    const extractRowLink = (row: HTMLTableRowElement, index: number) => {
+        const cells = Array.from(row.querySelectorAll("td")) as HTMLTableCellElement[];
+        if (!cells.length) return undefined;
+        const cell = cells[index] || cells[0];
+        const anchor = cell?.querySelector("a") as HTMLAnchorElement | null;
+        return anchor?.href;
+    };
+
+    const parseTableItems = (table: HTMLTableElement): AllPageItem[] => {
+        const { headers, headerRowIndex, rows } = getHeaderMap(table);
+        if (!rows.length) return [];
+        const titleIdx = findHeaderIndex(headers, ["assignment", "grade item", "item", "name", "title"]);
+        const dueIdx = findHeaderIndex(headers, ["due"]);
+        const scoreIdx = findHeaderIndex(headers, ["score"]);
+        const statusIdx = findHeaderIndex(headers, ["completion", "status", "evaluation"]);
+        const feedbackIdx = findHeaderIndex(headers, ["feedback"]);
+        const attachmentsIdx = findHeaderIndex(headers, ["attachment"]);
+
+        const dataRows = rows.slice(headerRowIndex + 1).filter((row) =>
+            row.querySelectorAll("td").length
+        ) as HTMLTableRowElement[];
+
+        return dataRows.map((row) => {
+            const rowText = normalizeText(row.textContent);
+            const title = titleIdx >= 0 ? extractRowText(row, titleIdx) : extractRowTitle(row);
+            const link = titleIdx >= 0 ? extractRowLink(row, titleIdx) : (row.querySelector("a") as HTMLAnchorElement | null)?.href;
+            let due = dueIdx >= 0 ? extractRowText(row, dueIdx) : "";
+            let score = scoreIdx >= 0 ? extractRowText(row, scoreIdx) : "";
+            let status = statusIdx >= 0 ? extractRowText(row, statusIdx) : "";
+            let feedback = feedbackIdx >= 0 ? extractRowText(row, feedbackIdx) : "";
+            let attachments = attachmentsIdx >= 0 ? extractRowText(row, attachmentsIdx) : "";
+
+            if (!due) {
+                const match = rowText.match(/due on\s+[^.]+/i);
+                if (match) due = match[0];
+            }
+            if (!score) {
+                const match = rowText.match(/\d+(?:\.\d+)?\s*\/\s*\d+(?:\.\d+)?/);
+                score = match ? match[0] : "";
+            }
+            if (!score && rowText.includes("%")) {
+                const match = rowText.match(/\d+(?:\.\d+)?\s*%/);
+                score = match ? match[0] : "";
+            }
+            if (!status) {
+                const match = rowText.match(/\b(not submitted|submitted|in progress|graded|complete|incomplete)\b/i);
+                status = match ? match[0] : "";
+            }
+            if (!feedback) {
+                const match = rowText.match(/\bfeedback\b[:\s-]*(unread|read|draft|published|none)\b/i);
+                feedback = match ? match[1] : "";
+            }
+            if (!attachments && rowText.toLowerCase().includes("attachment")) {
+                attachments = "Available";
+            }
+            return {
+                title: normalizeText(title),
+                due: normalizeText(due),
+                score: normalizeText(score),
+                status: normalizeText(status),
+                feedback: normalizeText(feedback),
+                attachments: normalizeText(attachments),
+                link
+            };
+        });
+    };
+
+    const extractAllPageItems = (doc: Document, mode: "grades" | "assignments"): AllPageItem[] => {
+        const emptyText = normalizeText(doc.body?.textContent);
+        if (emptyText.toLowerCase().includes("there are no assignments")) {
+            return [];
+        }
+
+        const tables = Array.from(doc.querySelectorAll("table")) as HTMLTableElement[];
+        for (const table of tables) {
+            const items = parseTableItems(table);
+            if (items.length) return items;
+        }
+
+        const listItems = Array.from(doc.querySelectorAll("li, .d2l-datalist-item, .d2l-list-item")) as HTMLElement[];
+        const fallback: AllPageItem[] = [];
+        for (const item of listItems) {
+            const text = normalizeText(item.textContent);
+            if (!text || text.length < 10) continue;
+            const titleAnchor = item.querySelector("a");
+            const title = normalizeText(titleAnchor?.textContent || text);
+            fallback.push({ title, link: (titleAnchor as HTMLAnchorElement | null)?.href });
+            if (fallback.length >= 20) break;
+        }
+        return fallback;
+    };
+
+    const renderAllPageItems = (body: HTMLElement, items: AllPageItem[], url: string, mode: "grades" | "assignments") => {
+        body.replaceChildren();
+        if (!items.length) {
+            const empty = document.createElement("div");
+            empty.className = "d2lplus-allpage__empty";
+            empty.textContent = mode === "grades" ? "No grades found for this course." : "No assignments found for this course.";
+            const link = document.createElement("a");
+            link.className = "d2lplus-allpage__link";
+            link.href = url;
+            link.target = "_blank";
+            link.rel = "noopener";
+            link.textContent = "Open in D2L";
+            empty.appendChild(link);
+            body.appendChild(empty);
+            return;
+        }
+
+        const list = document.createElement("div");
+        list.className = "d2lplus-allpage__list";
+
+        for (const item of items) {
+            const entry = document.createElement("div");
+            entry.className = "d2lplus-allpage__entry";
+
+            const main = document.createElement("div");
+            const title = document.createElement("div");
+            title.className = "d2lplus-allpage__entry-title";
+            title.textContent = item.title || "Untitled";
+            main.appendChild(title);
+
+            const meta = document.createElement("div");
+            meta.className = "d2lplus-allpage__meta";
+
+            if (item.due) {
+                const pill = document.createElement("span");
+                pill.className = "d2lplus-allpage__pill";
+                pill.textContent = `Due: ${item.due}`;
+                meta.appendChild(pill);
+            }
+            if (item.status) {
+                const pill = document.createElement("span");
+                pill.className = "d2lplus-allpage__pill";
+                pill.textContent = `Status: ${item.status}`;
+                meta.appendChild(pill);
+            }
+            if (item.feedback) {
+                const pill = document.createElement("span");
+                pill.className = "d2lplus-allpage__pill";
+                pill.textContent = `Feedback: ${item.feedback}`;
+                meta.appendChild(pill);
+            }
+            if (item.attachments) {
+                const pill = document.createElement("span");
+                pill.className = "d2lplus-allpage__pill";
+                pill.textContent = `Attachments: ${item.attachments}`;
+                meta.appendChild(pill);
+            }
+
+            if (!meta.childElementCount) {
+                const pill = document.createElement("span");
+                pill.className = "d2lplus-allpage__pill";
+                pill.textContent = "Details not available";
+                meta.appendChild(pill);
+            }
+
+            main.appendChild(meta);
+
+            if (item.link) {
+                const link = document.createElement("a");
+                link.className = "d2lplus-allpage__link";
+                link.href = item.link;
+                link.target = "_blank";
+                link.rel = "noopener";
+                link.textContent = "Open";
+                main.appendChild(link);
+            }
+
+            const score = document.createElement("div");
+            score.className = "d2lplus-allpage__score";
+            score.textContent = item.score || "-";
+
+            entry.appendChild(main);
+            entry.appendChild(score);
+            list.appendChild(entry);
+        }
+
+        body.appendChild(list);
     };
 
     async function renderAllPage(mode: "grades" | "assignments", courses: CourseInfo[]) {
