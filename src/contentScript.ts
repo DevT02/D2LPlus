@@ -2930,7 +2930,7 @@
                         const previewButtonEl = document.createElement("d2l-button");
                         previewButtonEl.className = "preview-btn";
                         previewButtonEl.setAttribute("primary", "");
-                        previewButtonEl.type = "button";
+                        previewButtonEl.setAttribute("type", "button");
                         previewButtonEl.style.marginLeft = "auto";
                         previewButtonEl.style.marginRight = "auto";
                         previewButtonEl.textContent = "Preview";
