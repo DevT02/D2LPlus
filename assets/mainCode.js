@@ -18,5 +18,5 @@ var code = LZString.decompressFromEncodedURIComponent(url.searchParams.get("code
 
 
 document.getElementById("code-viewer").setAttribute("class", `hljs language-${lang}`)
-document.getElementById("code-viewer").innerHTML = escapeHTML(code)
+document.getElementById("code-viewer").textContent = code || ""
 document.getElementById("filename").innerText = `${filename}.${lang}`

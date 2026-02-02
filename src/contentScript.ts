@@ -2886,17 +2886,11 @@
     getSettings().then(applySettings);
 
     // Code preview feature
-    const PREVIEW_BUTTON = `< slot class="PreviewButton" > <d2l-button class="preview-btn" primary = "" type = "button" style = "margin-left:auto; margin-right:auto" > Preview < /d2l-button></slot > `;
     let lastPress = new Date().getTime();
     const lastPressLimit = 2 * 1000;
 
     setTimeout(() => {
-        let LZString: any;
-
-        (async () => {
-            const src = ext.runtime.getURL("src/lz-string-default.min.js");
-            LZString = (await import(src)).default;
-        })();
+        const LZString = (globalThis as any).LZString;
 
         try {
             const gradeList = (document.querySelector('d2l-consistent-evaluation[class="d2l-token-receiver"]') as any)
@@ -2931,18 +2925,29 @@
                         let url = file_element?.getAttribute("data-href");
                         let file_extension = file_element?.getAttribute("data-extension");
 
-                        item.innerHTML += PREVIEW_BUTTON;
+                        const slot = document.createElement("slot");
+                        slot.className = "PreviewButton";
+                        const previewButtonEl = document.createElement("d2l-button");
+                        previewButtonEl.className = "preview-btn";
+                        previewButtonEl.setAttribute("primary", "");
+                        previewButtonEl.type = "button";
+                        previewButtonEl.style.marginLeft = "auto";
+                        previewButtonEl.style.marginRight = "auto";
+                        previewButtonEl.textContent = "Preview";
+                        slot.appendChild(previewButtonEl);
+                        item.appendChild(slot);
 
                         const getFile = async () => {
                             const response = await fetch(url!);
                             const file_contents = await response.text();
 
-                            let previewButton = item.querySelector("slot[class=PreviewButton]")?.querySelector('d2l-button[class="preview-btn"]') as HTMLElement | null;
+                            let previewButton = item.querySelector("slot.PreviewButton")?.querySelector('d2l-button.preview-btn') as HTMLElement | null;
                             if (!previewButton) return;
 
                             previewButton.onclick = () => {
                                 if ((new Date().getTime() - lastPress) < lastPressLimit) return;
                                 lastPress = new Date().getTime();
+                                if (!LZString?.compressToEncodedURIComponent) return;
                                 ext.runtime.sendMessage({
                                     action: "openPopup",
                                     lang: file_extension,
@@ -3456,13 +3461,23 @@
                                 doc.querySelector("d2l-table-wrapper") ||
                                 doc.querySelector(".d2l-page-main") ||
                                 doc.body;
-                            body.innerHTML = candidate ? candidate.innerHTML : "<div>No data found.</div>";
+                            if (candidate) {
+                                const fragment = document.createDocumentFragment();
+                                for (const child of Array.from(candidate.childNodes)) {
+                                    fragment.appendChild(child.cloneNode(true));
+                                }
+                                body.replaceChildren(fragment);
+                            } else {
+                                const message = document.createElement("div");
+                                message.textContent = "No data found.";
+                                body.replaceChildren(message);
+                            }
                             removeCourseMetadata(body, course.name);
                             applyIframeDarkStyles(body);
                             body.setAttribute("data-loaded", "true");
                         })
                         .catch(() => {
-                            body.innerHTML = "<div>Failed to load.</div>";
+                            body.textContent = "Failed to load.";
                         });
                 }
             });

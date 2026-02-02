@@ -38,6 +38,7 @@
         "*://d2l.msu.edu/*"
       ],
       "js": [
+        "src/lz-string-default.min.js",
         "dist/contentScript.js"
       ],
       "run_at": "document_end",
@@ -50,7 +51,12 @@
   "browser_specific_settings": {
     "gecko": {
       "id": "d2lplus@local",
-      "strict_min_version": "109.0"
+      "strict_min_version": "109.0",
+      "data_collection_permissions": {
+        "required": [
+          "none"
+        ]
+      }
     }
   },
   "icons": {

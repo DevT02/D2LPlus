@@ -14,7 +14,9 @@
   function render(courses: { id: string; name: string }[]) {
     const grid = document.getElementById("grid");
     if (!grid) return;
-    grid.innerHTML = "";
+    while (grid.firstChild) {
+      grid.removeChild(grid.firstChild);
+    }
 
     for (const course of courses) {
       const card = document.createElement("div");
